@@ -2,7 +2,8 @@
 pip install -e .
 # or:
 # python setup.py develop
-python setup.py sdist bdist_wheel --universal
+python setup.py sdist
+python setup.py bdist_wheel --universal
 python setup.py register
 twine upload dist/*
 # or:
