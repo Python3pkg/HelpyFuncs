@@ -3,6 +3,7 @@ from numpy import allclose, array, float32, ones
 from sympy import Atom, Float, Integer
 from sympy.core.numbers import NegativeOne, One, Zero
 from sympy.matrices import Matrix
+from sympy.printing.theanocode import theano_function
 
 
 FLOAT_TYPES = float, Float, float32, Integer, NegativeOne, One, Zero, Matrix
@@ -49,9 +50,5 @@ def sympy_xreplace(obj, xreplace___dict={}):
         return copy(obj)
 
 
-def sympy_vector_sum_elems(sympy_vector):
-    m, n = sympy_vector.shape
-    if m == 1:
-        return sympy_vector.dot(Matrix(ones([n, 1])))
-    elif n == 1:
-        return Matrix(ones([1, m])).dot(sympy_vector)
+def sympy_eval_by_theano(sympy_expr, symbols=[], **kwargs):
+    return theano_function(symbols, [sympy_expr])(**kwargs)
