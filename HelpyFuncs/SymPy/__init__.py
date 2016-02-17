@@ -1,5 +1,5 @@
 from copy import copy
-from numpy import allclose, array, float32
+from numpy import allclose, array, float32, ones
 from sympy import Atom, Float, Integer
 from sympy.core.numbers import NegativeOne, One, Zero
 from sympy.matrices import Matrix
@@ -47,3 +47,11 @@ def sympy_xreplace(obj, xreplace___dict={}):
         return obj
     else:
         return copy(obj)
+
+
+def sympy_vector_sum_elems(sympy_vector):
+    m, n = sympy_vector.shape
+    if m == 1:
+        return sympy_vector.dot(Matrix(ones([n, 1])))
+    elif n == 1:
+        return Matrix(ones([1, m])).dot(sympy_vector)
