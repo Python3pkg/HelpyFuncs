@@ -20,11 +20,15 @@ def sympy_to_float(sympy_number_or_matrix):
         return array(sympy_number_or_matrix.tolist(), dtype=float)
 
 
-def sympy_vector(a, dtype=float32):
+def numpy_vector(a, dtype=float32):
     v = array(a, dtype=dtype)
     if v.ndim == 1:
         v = atleast_2d(v).T
-    return Matrix(v)
+    return v
+
+
+def sympy_vector(a, dtype=float32):
+    return Matrix(numpy_vector(a, dtype=dtype))
 
 
 def sympy_allclose(*sympy_matrices, **kwargs):
