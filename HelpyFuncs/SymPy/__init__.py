@@ -1,5 +1,5 @@
 from copy import copy
-from numpy import allclose, array, float32, ones
+from numpy import allclose, array, atleast_2d, float32
 from sympy import Atom, Float, Integer
 from sympy.core.numbers import NegativeOne, One, Zero
 from sympy.matrices import Matrix
@@ -18,6 +18,13 @@ def sympy_to_float(sympy_number_or_matrix):
         return float(sympy_number_or_matrix)
     else:
         return array(sympy_number_or_matrix.tolist(), dtype=float)
+
+
+def sympy_float32_vector(a):
+    v = array(a, dtype=float32)
+    if v.ndim == 1:
+        v = atleast_2d(v).T
+    return Matrix(v)
 
 
 def sympy_allclose(*sympy_matrices, **kwargs):
