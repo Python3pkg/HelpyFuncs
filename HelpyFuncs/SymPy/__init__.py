@@ -20,8 +20,8 @@ def sympy_to_float(sympy_number_or_matrix):
         return array(sympy_number_or_matrix.tolist(), dtype=float)
 
 
-def sympy_float32_vector(a):
-    v = array(a, dtype=float32)
+def sympy_vector(a, dtype=float32):
+    v = array(a, dtype=dtype)
     if v.ndim == 1:
         v = atleast_2d(v).T
     return Matrix(v)
