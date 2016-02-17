@@ -16,16 +16,17 @@ def terminal_value(
 
 
 def present_value(amount=0., discount_rate=0., nb_periods=0.):
-    return amount / (discount_rate ** nb_periods)
+    return amount / ((1 + discount_rate) ** nb_periods)
 
 
 def net_present_value(
         cash_flows=Matrix([0.]),
         discount_rate=0.):
     m, n = cash_flows.shape
+    discount_rate_plus_1 = discount_rate + 1
     if m == 1:
-        discount_vector = Matrix([discount_rate ** -i for i in range(n)])
+        discount_vector = Matrix([discount_rate_plus_1 ** -i for i in range(n)])
         return Determinant(cash_flows * discount_vector)
     elif n == 1:
-        discount_vector = Matrix([[discount_rate ** -i for i in range(m)]])
+        discount_vector = Matrix([[discount_rate_plus_1 ** -i for i in range(m)]])
         return Determinant(discount_vector * cash_flows)
