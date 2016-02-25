@@ -1,6 +1,6 @@
 from copy import copy
-from numpy import allclose, array, atleast_2d, float32
-from sympy import Atom, Float, Integer
+from numpy import allclose, array, float32
+from sympy import Atom, Expr, Float, Integer, sympify
 from sympy.core.numbers import NegativeOne, One, Zero
 from sympy.matrices import Matrix
 from sympy.printing.theanocode import theano_function
@@ -18,17 +18,6 @@ def sympy_to_float(sympy_number_or_matrix):
         return float(sympy_number_or_matrix)
     else:
         return array(sympy_number_or_matrix.tolist(), dtype=float)
-
-
-def numpy_vector(a, dtype=float32):
-    v = array(a, dtype=dtype)
-    if v.ndim == 1:
-        v = atleast_2d(v).T
-    return v
-
-
-def sympy_vector(a, dtype=float32):
-    return Matrix(numpy_vector(a, dtype=dtype))
 
 
 def sympy_allclose(*sympy_matrices, **kwargs):
@@ -61,5 +50,14 @@ def sympy_xreplace(obj, xreplace___dict={}):
         return copy(obj)
 
 
-def sympy_eval_by_theano(sympy_expr, symbols=[], **kwargs):
-    return theano_function(symbols, [sympy_expr])(**kwargs)
+def sympy_theanify(sympy_expr, symbols=()):
+    if isinstance(sympy_expr, Expr):
+        if not symbols:
+            symbols = sympy_expr.free_symbols
+        return theano_function(symbols, [sympy_expr])
+    else:
+        return lambda **kwargs: sympy_expr
+
+
+def sympy_eval_by_theano(sympy_expr, symbols=(), **kwargs):
+    return sympy_theanify(sympy_expr, symbols)(**kwargs)
