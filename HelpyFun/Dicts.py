@@ -1,3 +1,7 @@
+def haskeys(obj):
+    return hasattr(obj, 'keys')
+
+
 def combine_dict_and_kwargs(dict_obj, kwargs):
     d = kwargs
     if dict_obj:
