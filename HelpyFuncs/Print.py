@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 
 
@@ -20,3 +21,4 @@ def print_live_in_ipython():
             self.f.flush()
 
     sys.stdout = FlushFile(sys.stdout)
+    print('Live Printing in iPython Enabled')
