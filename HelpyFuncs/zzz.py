@@ -2,8 +2,8 @@ from copy import deepcopy
 from frozendict import frozendict
 from MathDict import MathDict
 from numpy import zeros
-from sympy.matrices import MatrixSymbol
-from SymPy import is_non_atomic_sympy_expr
+from .sympy.matrices import MatrixSymbol
+from .SymPy import is_non_atomic_sympy_expr
 
 
 def within_range(x, a, b, strict=True):
@@ -27,10 +27,10 @@ def approx_gradients(function, argument_array, epsilon=1e-6):
 def shift_time_subscripts(obj, t, *matrix_symbols_to_shift):
     if isinstance(obj, MathDict):
         return MathDict({shift_time_subscripts(key, t): shift_time_subscripts(value, t)
-                           for key, value in obj.items()})
+                           for key, value in list(obj.items())})
     elif isinstance(obj, frozendict):
         return frozendict({shift_time_subscripts(key, t): shift_time_subscripts(value, t)
-                           for key, value in obj.items()})
+                           for key, value in list(obj.items())})
     elif isinstance(obj, tuple):
         if len(obj) == 2 and not(isinstance(obj[0], (int, float))) and isinstance(obj[1], int):
             return shift_time_subscripts(obj[0], t), obj[1] + t
@@ -41,7 +41,7 @@ def shift_time_subscripts(obj, t, *matrix_symbols_to_shift):
     elif isinstance(obj, set):
         return {shift_time_subscripts(item, t) for item in obj}
     elif isinstance(obj, dict):
-        return {shift_time_subscripts(key, t): shift_time_subscripts(value, t) for key, value in obj.items()}
+        return {shift_time_subscripts(key, t): shift_time_subscripts(value, t) for key, value in list(obj.items())}
     elif isinstance(obj, MatrixSymbol):
         args = obj.args
         if isinstance(args[0], tuple):

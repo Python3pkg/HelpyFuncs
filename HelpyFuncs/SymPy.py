@@ -1,9 +1,9 @@
 from copy import copy
 from numpy import allclose, array, float32
-from sympy import Atom, Expr, Float, Integer, sympify
-from sympy.core.numbers import NegativeOne, One, Zero
-from sympy.matrices import Matrix
-from sympy.printing.theanocode import theano_function
+from .sympy import Atom, Expr, Float, Integer, sympify
+from .sympy.core.numbers import NegativeOne, One, Zero
+from .sympy.matrices import Matrix
+from .sympy.printing.theanocode import theano_function
 
 
 FLOAT_TYPES = float, Float, float32, Integer, NegativeOne, One, Zero, Matrix
@@ -43,7 +43,7 @@ def sympy_xreplace(obj, xreplace___dict={}):
         return frozenset(sympy_xreplace(item, xreplace___dict) for item in obj)
     elif hasattr(obj, 'keys'):
         obj = obj.copy()
-        for k, v in obj.items():
+        for k, v in list(obj.items()):
             obj[k] = sympy_xreplace(v, xreplace___dict)
         return obj
     else:
